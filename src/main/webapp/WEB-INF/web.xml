@@ -5,11 +5,21 @@
 	id="WebApp_ID" version="3.0">
 	<display-name>name</display-name>
 	<!-- parent 父上下文 -->
+	<!--&lt;!&ndash; log4j配置文件地址 &ndash;&gt;-->
+	<!--<context-param>-->
+		<!--<param-name>log4jConfigLocation</param-name>-->
+		<!--<param-value>/WEB-INF/log4j/log4j.properties</param-value>-->
+	<!--</context-param>-->
+
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>classpath*:/**/spring/**/spring-mybatis.xml</param-value>
 	</context-param>
 
+	<!--&lt;!&ndash; Log4j的监听器要放在spring监听器前面 &ndash;&gt;-->
+	<!--<listener>-->
+		<!--<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>-->
+	<!--</listener>-->
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
 	</listener>
