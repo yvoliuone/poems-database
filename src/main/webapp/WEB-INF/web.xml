@@ -7,8 +7,13 @@
 	<!-- parent 父上下文 -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>classpath*:/**/spring/**/spring-mvc.xml</param-value>
+		<param-value>classpath*:/**/spring/**/spring-mybatis.xml</param-value>
 	</context-param>
+
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
 	<filter>
 		<filter-name>encodingFilter</filter-name>
 		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
