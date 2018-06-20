@@ -15,7 +15,7 @@ public class PoemServiceImpl implements PoemService {
     PoemMapper poemMapper;
 
     @Transactional
-    public Poem queryPoem(Integer id) {
+    public Poem getPoem(Integer id) {
         return poemMapper.selectByPrimaryKey(id);
     }
 }

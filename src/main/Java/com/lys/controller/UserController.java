@@ -16,10 +16,20 @@ public class UserController {
 
     @RequestMapping("/getUser.do")
     public User getUser(@RequestParam("id") Integer id){
-        System.out.println("Poem ID received: " + id);
+        System.out.println("User ID received: " + id);
 
         User user = userService.getUser(id);
 
         return user;
+    }
+
+    @RequestMapping("/getUsername.do")
+    public String getUsername(@RequestParam("id") Integer id) {
+        return getUser(id).getUsername();
+    }
+
+    @RequestMapping("/getUserTags.do")
+    public String getUserTags(@RequestParam("id") Integer id) {
+        return getUser(id).getUsertags();
     }
 }

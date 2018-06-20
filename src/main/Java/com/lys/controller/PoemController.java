@@ -14,11 +14,11 @@ public class PoemController {
     @Autowired
     private PoemService poemService;
 
-    @RequestMapping("/queryPoem.do")
-    public Poem queryPoem(@RequestParam("id") Integer id){
+    @RequestMapping("/getPoem.do")
+    public Poem getPoem(@RequestParam("id") Integer id){
         System.out.println("Poem ID received: " + id);
 
-        Poem poem = poemService.queryPoem(id);
+        Poem poem = poemService.getPoem(id);
 
         return poem;
     }
