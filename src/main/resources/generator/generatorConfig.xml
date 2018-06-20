@@ -18,7 +18,7 @@
 
         <!--数据库链接URL，用户名、密码 -->
         <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
-                        connectionURL="jdbc:mysql://localhost:3306/poems_db?useSSL=false&serverTimezone=UTC"
+                        connectionURL="jdbc:mysql://localhost:3306/poems_db?useSSL=false&amp;serverTimezone=UTC"
                         userId="root"
                         password="HAluo.14159">
         </jdbcConnection>
@@ -50,8 +50,10 @@
         <!--<table tableName="station_segment_relation" domainObjectName="StationSegmentRelation" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>-->
         <table tableName="poems" domainObjectName="Poem" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
             <columnOverride column="chapter" javaType="java.lang.String" jdbcType="VARCHAR" />
-            <columnOverride column="section" javaType="java.lang.String" jdbcType="VARCHAR" />
+            <columnOverride column="volume" javaType="java.lang.String" jdbcType="VARCHAR" />
             <columnOverride column="title" javaType="java.lang.String" jdbcType="VARCHAR" />
         </table>
+        <table tableName="userlist" domainObjectName="User" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>
+        <table tableName="tags" domainObjectName="Tag" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>
     </context>
 </generatorConfiguration>
