@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
+
 
 @RestController
 @RequestMapping("/user")
@@ -23,13 +25,15 @@ public class UserController {
         return user;
     }
 
-    @RequestMapping("/getUsername.do")
-    public String getUsername(@RequestParam("id") Integer id) {
-        return getUser(id).getUsername();
-    }
 
-    @RequestMapping("/getUserTags.do")
-    public String getUserTags(@RequestParam("id") Integer id) {
-        return getUser(id).getUsertags();
+    @RequestMapping("/getDailyPoems.do")
+    public ModelAndView getDailyPoems(@RequestParam("id") Integer id) {
+
+
+            String[] tags = userService.getUserTags(id);
+
+        String url = "redirect:/ poems/getPoemsByTags.do?tag1=" + tags[0] + "&tag2=" + tags[1];
+
+        return new ModelAndView(url);
     }
 }
