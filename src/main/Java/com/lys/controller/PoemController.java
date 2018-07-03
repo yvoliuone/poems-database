@@ -2,13 +2,15 @@ package com.lys.controller;
 
 import com.lys.model.Poem;
 import com.lys.service.PoemService;
-import org.apache.ibatis.annotations.Param;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.LineIterator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.faces.annotation.RequestMap;
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -39,5 +41,7 @@ public class PoemController {
 
         return poems;
     }
+
+
 
 }

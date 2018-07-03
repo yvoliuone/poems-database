@@ -11,4 +11,6 @@ public interface PoemService {
     Poem getPoem(Integer id);
 
     List<Poem> getPoemsByTags(String tag1, String tag2);
+
+    int insertPoem(Poem poem);
 }

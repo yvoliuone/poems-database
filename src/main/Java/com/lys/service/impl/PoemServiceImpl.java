@@ -24,4 +24,9 @@ public class PoemServiceImpl implements PoemService {
     public List<Poem> getPoemsByTags(String tag1, String tag2) {
         return poemMapper.selectByTags(tag1, tag2);
     }
+
+    @Transactional
+    public int insertPoem(Poem poem) {
+        return poemMapper.insert(poem);
+    }
 }
