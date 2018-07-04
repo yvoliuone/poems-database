@@ -10,7 +10,13 @@ public interface PoemService {
 
     Poem getPoem(Integer id);
 
-    List<Poem> getPoemsByTags(String tag1, String tag2);
+    List<Poem> getPoemsByTags(String tag1, String tag2, Integer count);
 
-    int insertPoem(Poem poem);
+    Poem getPoemByFavAuthor(String author);
+
+    Poem random();
+
+    void insertPoem(Poem poem);
+
+    void updatePoem(Poem poem);
 }

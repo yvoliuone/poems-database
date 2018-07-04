@@ -21,12 +21,27 @@ public class PoemServiceImpl implements PoemService {
     }
 
     @Transactional
-    public List<Poem> getPoemsByTags(String tag1, String tag2) {
-        return poemMapper.selectByTags(tag1, tag2);
+    public List<Poem> getPoemsByTags(String tag1, String tag2, Integer count) {
+        return poemMapper.selectByTags(tag1, tag2, count);
     }
 
     @Transactional
-    public int insertPoem(Poem poem) {
-        return poemMapper.insert(poem);
+    public Poem getPoemByFavAuthor(String author) {
+        return poemMapper.favAuthor(author);
+    }
+
+    @Transactional
+    public Poem random() {
+        return poemMapper.random();
+    }
+
+    @Transactional
+    public void insertPoem(Poem poem) {
+        poemMapper.insert(poem);
+    }
+
+    @Transactional
+    public void updatePoem(Poem poem) {
+        poemMapper.updateByPrimaryKey(poem);
     }
 }

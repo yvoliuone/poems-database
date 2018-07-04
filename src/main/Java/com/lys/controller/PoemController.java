@@ -8,11 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 @RestController
 @RequestMapping("/poems")
@@ -23,19 +25,51 @@ public class PoemController {
 
     @RequestMapping("/getPoem.do")
     public Poem getPoem(@RequestParam("id") Integer id){
-        System.out.println("Poem ID received: " + id);
 
-        Poem poem = poemService.getPoem(id);
-
-        return poem;
+        return poemService.getPoem(id);
     }
 
-    @RequestMapping("/getPoemsByTags.do")
-    public List<Poem> getPoemsByTags(@RequestParam("tag1") String tag1, @RequestParam("tag2") String tag2) {
+    @RequestMapping("/like.do")
+    public ModelAndView getDailyPoems(@RequestParam("userid") Integer userid, @RequestParam("poemid") Integer poemid) {
 
-        System.out.println("Tags received: " + tag1 + ", " + tag2);
+        String tags = poemService.getPoem(poemid).getTags();
 
-        List<Poem> poems = poemService.getPoemsByTags(tag1, tag2);
+        String url = "redirect:/user/updateCounts.do?userid=" + userid + "&poemid=" + poemid + "&tags=" + tags;
+
+        return new ModelAndView(url);
+    }
+
+    @RequestMapping("/getUserPoems.do")
+    public List<Poem> getUserPoems(@RequestParam("author") String author,
+                                   @RequestParam("tags") String tags) {
+
+        System.out.println("ENTER");
+
+        List<Poem> poems = getPoemsByTags(tags);
+        poems.add(getPoemByFavAuthor(author));
+        poems.add(random());
+
+        System.out.println("POEM LIST SIZE: " + poems.size());
+
+        return poems;
+    }
+
+
+    // Get three poems by user tags
+    private List<Poem> getPoemsByTags(@RequestParam("tags") String tags) {
+
+        // Random shuffle array
+        String[] tag = tags.split(",");
+        shuffle(tag);
+
+        // Get at most two poems from each set of two tags
+        List<Poem> poems = poemService.getPoemsByTags(tag[0], tag[1], 2);
+        int count = 3 - poems.size();
+        poems.addAll(poemService.getPoemsByTags(tag[1], tag[2], count));
+        if (poems.size() < 3) {
+            count = 3 - poems.size();
+            poems.addAll(poemService.getPoemsByTags(tag[0], tag[2], count));
+        }
 
         System.out.println(Arrays.toString(poems.toArray()));
 
@@ -43,5 +77,28 @@ public class PoemController {
     }
 
 
+    // Find one poem by user's favorite author
+    private Poem getPoemByFavAuthor(String author) {
 
+        return poemService.getPoemByFavAuthor(author);
+    }
+
+
+    // Include a random poem
+    private Poem random() {
+
+        return poemService.random();
+    }
+
+
+    // Shuffles a string array, implementing Fisher–Yates shuffle
+    private void shuffle(String[] tags) {
+        Random rnd = new Random();
+        for (int i = tags.length - 1; i > 0; i--) {
+            int index = rnd.nextInt(i + 1);
+            String s = tags[index];
+            tags[index] = tags[i];
+            tags[i] = s;
+        }
+    }
 }

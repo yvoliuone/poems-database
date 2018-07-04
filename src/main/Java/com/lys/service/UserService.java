@@ -11,4 +11,5 @@ public interface UserService {
 
     String[] getUserTags(Integer id);
 
+    void updateUser(User user);
 }

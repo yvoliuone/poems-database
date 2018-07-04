@@ -24,4 +24,9 @@ public class UserServiceImpl implements UserService {
         return userMapper.selectByPrimaryKey(id).getUsertags().split(",");
     }
 
+    @Transactional
+    public void updateUser(User user) {
+        userMapper.updateByPrimaryKey(user);
+    }
+
 }
