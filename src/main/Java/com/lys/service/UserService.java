@@ -9,7 +9,7 @@ public interface UserService {
 
     User getUser(Integer id);
 
-    String[] getUserTags(Integer id);
-
     void updateUser(User user);
+
+    void insertUser(User user);
 }

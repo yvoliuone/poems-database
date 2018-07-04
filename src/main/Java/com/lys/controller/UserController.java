@@ -1,5 +1,6 @@
 package com.lys.controller;
 
+import com.lys.model.Poem;
 import com.lys.model.User;
 import com.lys.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Arrays;
+import java.util.List;
 
 
 @RestController
@@ -21,31 +23,14 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @RequestMapping("/getUser.do")
-    public User getUser(@RequestParam("id") Integer id){
-        User user = userService.getUser(id);
-
-        return user;
-    }
 
 
-    @RequestMapping("/getDailyPoems.do")
-    public ModelAndView getDailyPoems(@RequestParam("id") Integer id,
-                                      RedirectAttributes attr) {
+    @RequestMapping("/userlogin.do")
+    public ModelAndView login(@RequestParam("id") Integer id, RedirectAttributes attr) {
 
-        updateTags(id);
+        User user = getUser(id) == null ? newUser(id) : getUser(id);
 
-        User user = userService.getUser(id);
-        String tags = user.getUsertags();
-        String author = user.getFavauthor();
-
-        attr.addAttribute("author", author);
-        attr.addAttribute("tags", tags);
-        String url = "redirect:/poems/getUserPoems.do";
-
-        System.out.println("reach1");
-
-        return new ModelAndView(url);
+        return getDailyPoems(id, attr);
     }
 
 
@@ -75,6 +60,23 @@ public class UserController {
                 liked.contains(poemid.toString()) ? liked : liked + "," + poemid;
         user.setLiked(liked);
         userService.updateUser(user);
+    }
+
+
+    // Get the five recommended poems for the user
+    private ModelAndView getDailyPoems(Integer id, RedirectAttributes attr) {
+
+        updateTags(id);
+
+        User user = userService.getUser(id);
+        String tags = user.getUsertags();
+        String author = user.getFavauthor();
+
+        attr.addAttribute("author", author);
+        attr.addAttribute("tags", tags);
+        String url = "redirect:/poems/getUserPoems.do";
+
+        return new ModelAndView(url);
     }
 
 
@@ -114,5 +116,27 @@ public class UserController {
         String newTags = tag1 + "," + tag2 + "," + tag3;
         user.setUsertags(newTags);
         userService.updateUser(user);
+    }
+
+
+    private User getUser(@RequestParam("id") Integer id){
+        User user = userService.getUser(id);
+
+        return user;
+    }
+
+    // Insert a new user to the database
+    private User newUser(@RequestParam("id") Integer id) {
+
+        User user = new User();
+
+        user.setUserid(id);
+        user.setCounts("0,0,0,0,0,0,0,0,0,0");
+        user.setFavauthor("李白");
+        user.setUsertags("1,3,4");
+
+        userService.insertUser(user);
+
+        return user;
     }
 }

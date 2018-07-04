@@ -20,13 +20,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Transactional
-    public String[] getUserTags(Integer id) {
-        return userMapper.selectByPrimaryKey(id).getUsertags().split(",");
+    public void updateUser(User user) {
+        userMapper.updateByPrimaryKey(user);
     }
 
     @Transactional
-    public void updateUser(User user) {
-        userMapper.updateByPrimaryKey(user);
+    public void insertUser(User user) {
+        userMapper.insert(user);
     }
 
 }

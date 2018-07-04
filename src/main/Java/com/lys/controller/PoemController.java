@@ -43,13 +43,9 @@ public class PoemController {
     public List<Poem> getUserPoems(@RequestParam("author") String author,
                                    @RequestParam("tags") String tags) {
 
-        System.out.println("ENTER");
-
         List<Poem> poems = getPoemsByTags(tags);
         poems.add(getPoemByFavAuthor(author));
         poems.add(random());
-
-        System.out.println("POEM LIST SIZE: " + poems.size());
 
         return poems;
     }
@@ -70,8 +66,6 @@ public class PoemController {
             count = 3 - poems.size();
             poems.addAll(poemService.getPoemsByTags(tag[0], tag[2], count));
         }
-
-        System.out.println(Arrays.toString(poems.toArray()));
 
         return poems;
     }
