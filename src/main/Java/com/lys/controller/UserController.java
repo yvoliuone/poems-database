@@ -1,6 +1,5 @@
 package com.lys.controller;
 
-import com.lys.model.Poem;
 import com.lys.model.User;
 import com.lys.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,10 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.Arrays;
-import java.util.List;
 
 
 @RestController
@@ -24,9 +20,8 @@ public class UserController {
     UserService userService;
 
 
-
     @RequestMapping("/userlogin.do")
-    public ModelAndView login(@RequestParam("id") Integer id, RedirectAttributes attr) {
+    public ModelAndView login(@RequestParam("id") String id, RedirectAttributes attr) {
 
         User user = getUser(id) == null ? newUser(id) : getUser(id);
 
@@ -35,8 +30,8 @@ public class UserController {
 
 
     @RequestMapping("/updateCounts.do")
-    public void updateCounts(@RequestParam("userid") Integer userid,
-                           @RequestParam("poemid") Integer poemid, @RequestParam("tags") String tags) {
+    public void updateCounts(@RequestParam("userid") String userid, @RequestParam("poemid") Integer poemid,
+                             @RequestParam("tags") String tags, @RequestParam("like") Integer like) {
         User user = userService.getUser(userid);
 
         // Tags to be incremented by one count
@@ -46,25 +41,28 @@ public class UserController {
         int[] tagCounts = atoiArr(user.getCounts().split(","));
 
         for (int i : poemTags) {
-            tagCounts[i]++;
+            if (like == 1) tagCounts[i] = tagCounts[i] + 3;
+            if (like == 0) tagCounts[i]++;
         }
 
         String newCounts = String.join(",", Arrays.toString(tagCounts)).replaceAll(" ", "");
         newCounts = newCounts.substring(1, newCounts.length() - 1);
 
         // Add to "liked" list and update the database
-        user.setCounts(newCounts);
+        if (like == 1) {
+            user.setCounts(newCounts);
 
-        String liked = user.getLiked();
-        liked = liked == null ? poemid.toString() :
-                liked.contains(poemid.toString()) ? liked : liked + "," + poemid;
-        user.setLiked(liked);
-        userService.updateUser(user);
+            String liked = user.getLiked();
+            liked = liked == null ? poemid.toString() :
+                    liked.contains(poemid.toString()) ? liked : liked + "," + poemid;
+            user.setLiked(liked);
+            userService.updateUser(user);
+        }
     }
 
 
     // Get the five recommended poems for the user
-    private ModelAndView getDailyPoems(Integer id, RedirectAttributes attr) {
+    private ModelAndView getDailyPoems(String id, RedirectAttributes attr) {
 
         updateTags(id);
 
@@ -93,7 +91,7 @@ public class UserController {
 
 
     // Update "userTags" to contain tags with the most counts
-    private void updateTags(Integer id) {
+    private void updateTags(String id) {
         User user = userService.getUser(id);
         int[] counts = atoiArr(user.getCounts().split(","));
 
@@ -119,14 +117,14 @@ public class UserController {
     }
 
 
-    private User getUser(@RequestParam("id") Integer id){
+    private User getUser(String id){
         User user = userService.getUser(id);
 
         return user;
     }
 
     // Insert a new user to the database
-    private User newUser(@RequestParam("id") Integer id) {
+    private User newUser(String id) {
 
         User user = new User();
 

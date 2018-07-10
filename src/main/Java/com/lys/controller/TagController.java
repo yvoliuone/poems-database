@@ -16,7 +16,6 @@ public class TagController {
 
     @RequestMapping("/getTag.do")
     public Tag getTag(@RequestParam("id") Integer id){
-        System.out.println("Poem ID received: " + id);
 
         Tag tag = tagService.getTag(id);
 

@@ -2,17 +2,12 @@ package com.lys.controller;
 
 import com.lys.model.Poem;
 import com.lys.service.PoemService;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.LineIterator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -30,11 +25,23 @@ public class PoemController {
     }
 
     @RequestMapping("/like.do")
-    public ModelAndView getDailyPoems(@RequestParam("userid") Integer userid, @RequestParam("poemid") Integer poemid) {
+    public ModelAndView like(@RequestParam("userid") String userid, @RequestParam("poemid") Integer poemid) {
 
         String tags = poemService.getPoem(poemid).getTags();
 
-        String url = "redirect:/user/updateCounts.do?userid=" + userid + "&poemid=" + poemid + "&tags=" + tags;
+        String url = "redirect:/user/updateCounts.do?userid=" + userid + "&poemid=" + poemid
+                + "&tags=" + tags + "&like=1";
+
+        return new ModelAndView(url);
+    }
+
+    @RequestMapping("/click.do")
+    public ModelAndView click(@RequestParam("userid") String userid, @RequestParam("poemid") Integer poemid) {
+
+        String tags = poemService.getPoem(poemid).getTags();
+
+        String url = "redirect:/user/updateCounts.do?userid=" + userid + "&poemid=" + poemid
+                + "&tags=" + tags + "&like=0";
 
         return new ModelAndView(url);
     }
@@ -52,7 +59,7 @@ public class PoemController {
 
 
     // Get three poems by user tags
-    private List<Poem> getPoemsByTags(@RequestParam("tags") String tags) {
+    private List<Poem> getPoemsByTags(String tags) {
 
         // Random shuffle array
         String[] tag = tags.split(",");

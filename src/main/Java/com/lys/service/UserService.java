@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 @Service
 public interface UserService {
 
-    User getUser(Integer id);
+    User getUser(String id);
 
     void updateUser(User user);
 

@@ -15,7 +15,7 @@ public class UserServiceImpl implements UserService {
     UserMapper userMapper;
 
     @Transactional
-    public User getUser(Integer id) {
+    public User getUser(String id) {
         return userMapper.selectByPrimaryKey(id);
     }
 
@@ -28,5 +28,4 @@ public class UserServiceImpl implements UserService {
     public void insertUser(User user) {
         userMapper.insert(user);
     }
-
 }
