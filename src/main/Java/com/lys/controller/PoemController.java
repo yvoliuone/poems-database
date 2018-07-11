@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -30,7 +31,7 @@ public class PoemController {
         String tags = poemService.getPoem(poemid).getTags();
 
         String url = "redirect:/user/updateCounts.do?userid=" + userid + "&poemid=" + poemid
-                + "&tags=" + tags + "&like=1";
+                + "&count=3" + "&tags=" + tags;
 
         return new ModelAndView(url);
     }
@@ -41,9 +42,33 @@ public class PoemController {
         String tags = poemService.getPoem(poemid).getTags();
 
         String url = "redirect:/user/updateCounts.do?userid=" + userid + "&poemid=" + poemid
-                + "&tags=" + tags + "&like=0";
+                + "&count=1" + "&tags=" + tags;
 
         return new ModelAndView(url);
+    }
+
+    @RequestMapping("/unlike.do")
+    public ModelAndView unlike(@RequestParam("userid") String userid, @RequestParam("poemid") Integer poemid) {
+
+        String tags = poemService.getPoem(poemid).getTags();
+
+        String url = "redirect:/user/updateCounts.do?userid=" + userid + "&poemid=" + poemid
+                + "&count=-3" + "&tags=" + tags;
+
+        return new ModelAndView(url);
+    }
+
+    @RequestMapping("/getCollection.do")
+    public List<Poem> getCollection(@RequestParam("ids") String ids) {
+        String[] idArray = ids.split(",");
+        List<Poem> poems = new ArrayList<>();
+
+        for (String idString : idArray) {
+            int id = Integer.parseInt(idString);
+            poems.add(getPoem(id));
+        }
+
+        return poems;
     }
 
     @RequestMapping("/getUserPoems.do")

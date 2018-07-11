@@ -31,7 +31,7 @@ public class UserController {
 
     @RequestMapping("/updateCounts.do")
     public void updateCounts(@RequestParam("userid") String userid, @RequestParam("poemid") Integer poemid,
-                             @RequestParam("tags") String tags, @RequestParam("like") Integer like) {
+                             @RequestParam("tags") String tags, @RequestParam("count") Integer count) {
         User user = userService.getUser(userid);
 
         // Tags to be incremented by one count
@@ -40,24 +40,51 @@ public class UserController {
         // Original counts
         int[] tagCounts = atoiArr(user.getCounts().split(","));
 
-        for (int i : poemTags) {
-            if (like == 1) tagCounts[i] = tagCounts[i] + 3;
-            if (like == 0) tagCounts[i]++;
-        }
+        for (int i : poemTags) tagCounts[i] += count;
 
         String newCounts = String.join(",", Arrays.toString(tagCounts)).replaceAll(" ", "");
         newCounts = newCounts.substring(1, newCounts.length() - 1);
 
-        // Add to "liked" list and update the database
-        if (like == 1) {
-            user.setCounts(newCounts);
 
+        // User "liked" the poem
+        if (count == 3) {
             String liked = user.getLiked();
-            liked = liked == null ? poemid.toString() :
+            liked = liked == null || liked.equals("") ? poemid.toString() :
                     liked.contains(poemid.toString()) ? liked : liked + "," + poemid;
             user.setLiked(liked);
-            userService.updateUser(user);
         }
+
+        // User "unliked" the poem
+        if (count == -3) {
+            String liked = user.getLiked();
+            liked = liked.replaceAll(","+poemid+",",",");
+            liked = liked.replaceAll("(^|,)"+poemid+"($|,)","");
+            user.setLiked(liked);
+        }
+
+        user.setCounts(newCounts);
+        userService.updateUser(user);
+
+    }
+
+
+    @RequestMapping("/getLiked.do")
+    public ModelAndView getLiked(@RequestParam("id") String id) {
+        String liked = getUser(id).getLiked();
+        String url = "redirect:/poems/getCollection.do?ids="+liked;
+
+        return new ModelAndView(url);
+    }
+
+
+    @RequestMapping("/searchLiked.do")
+    public boolean searchLiked(@RequestParam("userid") String userid, @RequestParam("poemid") String poemid) {
+        String[] liked = getUser(userid).getLiked().split(",");
+
+        for (String id : liked) {
+            if (poemid.equals(id)) return true;
+        }
+        return false;
     }
 
 
@@ -73,6 +100,8 @@ public class UserController {
         attr.addAttribute("author", author);
         attr.addAttribute("tags", tags);
         String url = "redirect:/poems/getUserPoems.do";
+
+//        System.out.println("getDailyPoems");
 
         return new ModelAndView(url);
     }
