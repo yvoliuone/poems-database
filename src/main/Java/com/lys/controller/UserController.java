@@ -31,7 +31,8 @@ public class UserController {
 
     @RequestMapping("/updateCounts.do")
     public void updateCounts(@RequestParam("userid") String userid, @RequestParam("poemid") Integer poemid,
-                             @RequestParam("tags") String tags, @RequestParam("count") Integer count) {
+                             @RequestParam("tags") String tags, @RequestParam("count") Integer count,
+                             @RequestParam("author") String author) {
         User user = userService.getUser(userid);
 
         // Tags to be incremented by one count
@@ -52,6 +53,7 @@ public class UserController {
             liked = liked == null || liked.equals("") ? poemid.toString() :
                     liked.contains(poemid.toString()) ? liked : liked + "," + poemid;
             user.setLiked(liked);
+            user.setFavauthor(author);
         }
 
         // User "unliked" the poem

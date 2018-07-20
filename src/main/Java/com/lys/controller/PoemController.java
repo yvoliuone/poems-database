@@ -2,12 +2,17 @@ package com.lys.controller;
 
 import com.lys.model.Poem;
 import com.lys.service.PoemService;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.LineIterator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -26,12 +31,20 @@ public class PoemController {
     }
 
     @RequestMapping("/like.do")
-    public ModelAndView like(@RequestParam("userid") String userid, @RequestParam("poemid") Integer poemid) {
+    public ModelAndView like(@RequestParam("userid") String userid, @RequestParam("poemid") Integer poemid,
+                             RedirectAttributes attr) {
 
-        String tags = poemService.getPoem(poemid).getTags();
+        Poem poem = poemService.getPoem(poemid);
 
-        String url = "redirect:/user/updateCounts.do?userid=" + userid + "&poemid=" + poemid
-                + "&count=3" + "&tags=" + tags;
+        String tags = poem.getTags();
+        String author = poem.getAuthor();
+        attr.addAttribute("userid", userid);
+        attr.addAttribute("poemid", poemid);
+        attr.addAttribute("author", author);
+        attr.addAttribute("count", 3);
+        attr.addAttribute("tags", tags);
+
+        String url = "redirect:/user/updateCounts.do";
 
         return new ModelAndView(url);
     }
@@ -39,10 +52,11 @@ public class PoemController {
     @RequestMapping("/click.do")
     public ModelAndView click(@RequestParam("userid") String userid, @RequestParam("poemid") Integer poemid) {
 
+
         String tags = poemService.getPoem(poemid).getTags();
 
         String url = "redirect:/user/updateCounts.do?userid=" + userid + "&poemid=" + poemid
-                + "&count=1" + "&tags=" + tags;
+                + "&author=null" + "&count=1" + "&tags=" + tags;
 
         return new ModelAndView(url);
     }
@@ -50,10 +64,13 @@ public class PoemController {
     @RequestMapping("/unlike.do")
     public ModelAndView unlike(@RequestParam("userid") String userid, @RequestParam("poemid") Integer poemid) {
 
-        String tags = poemService.getPoem(poemid).getTags();
+        Poem poem = poemService.getPoem(poemid);
+
+        String tags = poem.getTags();
+        String author = poem.getAuthor();
 
         String url = "redirect:/user/updateCounts.do?userid=" + userid + "&poemid=" + poemid
-                + "&count=-3" + "&tags=" + tags;
+                + "&author=null" + "&count=-3" + "&tags=" + tags;
 
         return new ModelAndView(url);
     }
@@ -112,7 +129,6 @@ public class PoemController {
 
     // Include a random poem
     private Poem random() {
-
         return poemService.random();
     }
 
