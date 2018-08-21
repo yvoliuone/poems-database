@@ -1,0 +1,15 @@
+<!--index.wxml-->
+<swiper indicator-dots="{{indicatorDots}}"
+  autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}">
+  <block wx:key wx:for="{{slides}}">
+    <swiper-item>
+      <view class="swiper-item" id="{{index}}" bindtap="click" style="background-image: url('http://193.112.104.193:8080/poem_war/image/getIcon.do?type=bg&id={{background}}{{index}}')">
+        <view class="content"> {{item.left}} </view>
+        <view class="content"> {{item.right}} </view> 
+        <image catchtap='goToCollection' src="http://193.112.104.193:8080/poem_war/image/getIcon.do?type=collection&id=0"></image>  
+      </view>
+    </swiper-item>
+  </block>
+</swiper>
+
+

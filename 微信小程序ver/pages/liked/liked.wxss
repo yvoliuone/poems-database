@@ -1,0 +1,48 @@
+/* pages/liked/liked.wxss */
+
+page{
+  background-color: #f6fef6;
+  height: 100%;
+  width: 100%;  
+  /* display: flex;
+  flex-direction: column;  
+  position: center;  
+  align-items: center;  
+  justify-content: center;   */
+  font-size: 36rpx;
+  text-align: center;
+}
+
+view{
+  background-color: #f6fef4;
+  height: 11.5%;
+  width: 70%; 
+  display: flex; 
+  flex-direction: column;  
+  /* position: center;   */
+   align-items: center;   
+  /* justify-content: center;  */
+  overflow: hidden;
+  line-height: 1.5em;
+  /* margin: 11%; */
+  /* border: 11rem; */
+  margin-top: 5%;  
+  /* margin-left: 10%;  */
+  margin-left: 11%;
+  margin-right: 10%;
+  margin-bottom: 5%;
+  box-shadow: 0.1rem 0.1rem 0.3rem grey; 
+  border: 1px solid green;
+  border-radius: 10px;
+  padding: 3%;
+  color: #6d480b;
+}
+
+.home{
+  height: 3.5%;
+  width: 7%;
+  position: fixed;
+  top: 2%;
+  left: 2%;
+  opacity: 0.5;
+}

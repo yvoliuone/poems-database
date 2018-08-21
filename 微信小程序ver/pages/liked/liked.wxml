@@ -1,0 +1,10 @@
+<!--pages/liked/liked.wxml-->
+<scroll-view scroll-y="true" style="height: {{height}}%">
+  <text>\n</text> <text>\n</text> <text>喜欢的诗</text> <text>\n</text>
+  <block wx:key wx:for="{{poems}}">
+    <view id="{{index}}" class="content" bindtap='content'> 
+      {{item.title}}  {{item.author}} <text>\n</text> {{item.content}}
+    </view>
+  </block>
+  <image class="home" bindtap='goHome' src="http://193.112.104.193:8080/poem_war/image/getIcon.do?type=home&id=0"></image>
+</scroll-view>

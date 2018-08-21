@@ -1,0 +1,24 @@
+<!--pages/content/content.wxml-->
+<scroll-view scroll-y="true" style="height: {{height}}px">
+  <view class="slide{{background}}"> 
+    <text class="title">{{poem.title}}</text> 
+    <text class="author">{{poem.author}}</text>
+    <block wx:key wx:for="{{poem.content}}">
+      <view class="content"> 
+        {{item}}
+      </view>
+    </block>
+    <text>\n</text><text>\n</text>
+    <text>\n</text>
+    <text>【意译】</text>
+    <block wx:key wx:for="{{poem.trans}}">
+      <view class="content"> 
+        {{item}}
+      </view>
+    </block>
+    <image class="likes" catchtap='like' wx:if="{{liked}}" src="http://193.112.104.193:8080/poem_war/image/getIcon.do?type=liked&id=0"></image>
+    <image class="likes" wx:else catchtap='like' src="http://193.112.104.193:8080/poem_war/image/getIcon.do?type=unliked&id=0"></image>
+    <image class="collection" bindtap='goToCollection' src="http://193.112.104.193:8080/poem_war/image/getIcon.do?type=collection&id=0"></image>
+    <image class="home" bindtap='goHome' src="http://193.112.104.193:8080/poem_war/image/getIcon.do?type=home&id=0"></image>
+  </view>
+</scroll-view>
