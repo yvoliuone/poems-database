@@ -18,7 +18,7 @@
 
         <!--数据库链接URL，用户名、密码 -->
         <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
-                        connectionURL="jdbc:mysql://localhost:3306/poems_db?useSSL=false&amp;serverTimezone=UTC"
+                        connectionURL="jdbc:mysql://193.112.104.193:3306/poem_db?useSSL=false&amp;serverTimezone=UTC"
                         userId="root"
                         password="HAluo.14159">
         </jdbcConnection>
